@@ -1,11 +1,71 @@
 ## AWS AppSync Multi Region Deployment
 
-This repository contains code written in the AWS Cloud Development Kit (CDK) which launches infrastructure across two different regions to demonstrate using AWS AppSync in a multi-region setup.
+This repository contains code written in the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) which launches infrastructure across two different regions to demonstrate using AWS AppSync in a multi-region setup.
 
-Be sure to:
+By default, AWS AppSync endpoints only trigger GraphQL subscriptions in response to data mutations received on that same endpoint. This means that if data is changed by any other source or endpoint, as it is the case of multi-Region deployment, then AppSync is not aware of this change and the subscription will not be triggered. To address this, you can use [AWS Lambda](https://aws.amazon.com/lambda/) functions and [Amazon DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) to enable subscriptions to work globally across Regions.
 
-* Change the title in this README
-* Edit your repository description on GitHub
+This pre-built AWS CDK solution extends AWS AppSync, enabling global applications with GraphQL subscriptions, and can be deployed to your AWS environment for testing purposes.
+
+![Global Serverless Infrastructure](infrastructure.png?raw=true "Global Serverless Infrastructure")
+
+
+## Pre-Requisites
+### AWS Cloud9 Environment
+
+[AWS Cloud9](<https://aws.amazon.com/cloud9/>) is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser.
+
+AWS Cloud9 contains a collection of tools that let you code, build, run, test, debug, and release software in the cloud using your internet browser. The IDE offers support for python, pip, AWS CLI, and provides easy access to AWS resources through Identity and Access Management (IAM) user credentials. The IDE includes a terminal with sudo privileges to the managed instance that is hosting your development environment. This makes it easy for you to quickly run commands and directly access AWS services.
+
+#### Create an AWS Cloud9 environment:
+
+1. Open the [AWS Cloud9 console](<https://eu-west-1.console.aws.amazon.com/cloud9/home?region=eu-west-1>) in the Ireland region (eu-west-1).
+1. Choose **[Create Environment](<https://eu-west-1.console.aws.amazon.com/cloud9/home/create>)** or open the [link](<https://eu-west-1.console.aws.amazon.com/cloud9/home/create>).
+1. For **Name**, enter **myDevEnv**.
+1. Choose **Next step**
+1. For **Cost-saving setting**, choose **After four hours**.
+1. Select **Create a new no-ingress EC2 instance for environment (access via Systems Manager)**.
+1. Leave the remaining parameters to the default.
+1. Choose **Next Step**.
+1. Choose **Create Environment**.
+1. It will start the creation of the Cloud9 environment.
+
+This Cloud 9 environment will come pre installed with the following tools, which are required to launch the infrastructure:
+- AWS CLI
+- Node JS
+- Python v3
+- Pip
+
+### AWS CDK Toolkit
+The toolkit is a command-line utility which allows you to work with CDK apps.
+To install the toolkit, run the following command:
+```bash
+npm install -g aws-cdk
+```
+
+## Launch the Infrastructure
+To launch the infrastructure that is detailed in the CDK stacks, first clone this repository onto the cloud9 machine:
+```bash
+git clone git@github.com:aws-samples/aws-appsync-multi-region-deployment.git
+```
+
+Then we can run the `setup.sh` script, which will launch the two CDK stacks.
+```bash
+cd aws-appsync-multi-region-deployment
+bash setup.sh
+```
+
+This script will perform the following tasks automatically:
+1. Setup the Lambda functions by installing the required Node modules and compressing into a .zip package.
+2. Install the required CDK packages and modules
+3. Boostrap both CDK stacks
+4. Launch the primary region CDK stack
+5. Retrieve the ARN of the Global Table stream
+6. Launch the seciondary region CDK stack
+
+Whilst this script is running, it will require your confirmation before infrastructure is launched in your account. On two occasions you will be prompted to type `y` and press the return key.
+
+## Test the Solution
+todo
 
 ## Security
 
