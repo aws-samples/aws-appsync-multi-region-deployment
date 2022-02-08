@@ -1,6 +1,6 @@
-## My Project
+## AWS AppSync Multi Region Deployment
 
-TODO: Fill this README out!
+This repository contains code written in the AWS Cloud Development Kit (CDK) which launches infrastructure across two different regions to demonstrate using AWS AppSync in a multi-region setup.
 
 Be sure to:
 
