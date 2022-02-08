@@ -65,7 +65,40 @@ This script will perform the following tasks automatically:
 Whilst this script is running, it will require your confirmation before infrastructure is launched in your account. On two occasions you will be prompted to type `y` and press the return key.
 
 ## Test the Solution
-todo
+To test the solution, we will open a subscription to AWS AppSync in the Ireland region, and insert some data via a mutation to AWS AppSync in the Sydney region.
+
+1. Open the [AWS AppSync Console in Ireland](https://eu-west-1.console.aws.amazon.com/appsync/home?region=eu-west-1) in one browser window.
+2. In a separate browser window, open the [AWS AppSync Console in Sydney](https://ap-southeast-2.console.aws.amazon.com/appsync/home)
+3. In the Ireland region, open the GraphQL API titled "IrelandGQLSchema" by clicking on its title. Then click on the 'Queries' tab on the menu on the left.
+4. In the Sydney region, open the GraphQL API titled "SydneyGQLSchema" by clicking on its title. Then click on the 'Queries' tab on the menu on the left.
+5. In the Ireland region, enter the following query into the query window and click the play button to open a subscription to the Ireland AppSync endpoint:
+```
+subscription MySubscription {
+  onCreateItemsModel {
+    id
+    item
+  }
+}
+```
+6. In the Sydney region, enter the following mutation into the Query window and click the play button to send the data to the Sydney AppSync endpoint:
+```
+mutation MyMutation {
+  createItemsModel(input: {id: "Item001", item: "MyItem"}) {
+    id
+    item
+  }
+}
+```
+7. In the Ireland region, where you have a subscription open, observe the new data being received by the client. This data has travelled from your client, to the AWS AppSync endpoint in Sydney, into the backend DynamoDB Global Table, replicated to Sydney, triggered the Lambda function in Sydney which notified the AWS AppSync endpoint in Sydney to the new data, which in turn delivered it to the client subscribed to it.
+
+## Clean up
+To clean up the infrastructure launched, execute the following commands from your cloud9 environment:
+```bash
+cd globalserverless
+cdk destroy
+cd ../globalserverlesssecondregion
+cdk destroy
+```
 
 ## Security
 
