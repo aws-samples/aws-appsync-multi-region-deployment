@@ -2,7 +2,7 @@
 
 This repository contains code written in the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) which launches infrastructure across two different regions to demonstrate using AWS AppSync in a multi-region setup.
 
-By default, AWS AppSync endpoints only trigger GraphQL subscriptions in response to data mutations received on that same endpoint. This means that if data is changed by any other source or endpoint, as it is the case of multi-Region deployment, then AppSync is not aware of this change and the subscription will not be triggered. To address this, you can use [AWS Lambda](https://aws.amazon.com/lambda/) functions and [Amazon DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) to enable subscriptions to work globally across Regions.
+By default, AWS AppSync endpoints only trigger GraphQL subscriptions in response to data mutations received on that same endpoint. This means that if data is changed by any other source or endpoint, as it is the case of multi-region deployment, then AppSync is not aware of this change and the subscription will not be triggered. To address this, you can use [AWS Lambda](https://aws.amazon.com/lambda/) functions and [Amazon DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) to enable subscriptions to work globally across Regions.
 
 This pre-built AWS CDK solution extends AWS AppSync, enabling global applications with GraphQL subscriptions, and can be deployed to your AWS environment for testing purposes.
 
@@ -60,7 +60,7 @@ This script will perform the following tasks automatically:
 3. Boostrap both CDK stacks
 4. Launch the primary region CDK stack
 5. Retrieve the ARN of the Global Table stream
-6. Launch the seciondary region CDK stack
+6. Launch the secondary region CDK stack
 
 Whilst this script is running, it will require your confirmation before infrastructure is launched in your account. On two occasions you will be prompted to type `y` and press the return key.
 
@@ -89,7 +89,7 @@ mutation MyMutation {
   }
 }
 ```
-7. In the Ireland region, where you have a subscription open, observe the new data being received by the client. This data has travelled from your client, to the AWS AppSync endpoint in Sydney, into the backend DynamoDB Global Table, replicated to Sydney, triggered the Lambda function in Sydney which notified the AWS AppSync endpoint in Sydney to the new data, which in turn delivered it to the client subscribed to it.
+7. In the Ireland region, where you have a subscription open, observe the new data being received by the client. This data has traveled from your client, to the AWS AppSync endpoint in Sydney, into the backend DynamoDB Global Table, replicated to Sydney, triggered the Lambda function in Sydney which notified the AWS AppSync endpoint in Sydney to the new data, which in turn delivered it to the client subscribed to it.
 
 ## Clean up
 To clean up the infrastructure launched, execute the following commands from your cloud9 environment:
