@@ -5,8 +5,6 @@
 from aws_cdk import core
 from globalserverless.globalserverless_stack import GlobalserverlessStack
 
-appRegions = ['eu-west-1', 'ap-southeast-2']
-
 app = core.App()
 
 primary_stack = GlobalserverlessStack(
