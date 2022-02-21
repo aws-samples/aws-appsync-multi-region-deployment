@@ -57,10 +57,8 @@ bash setup.sh
 This script will perform the following tasks automatically:
 1. Setup the Lambda functions by installing the required Node modules and compressing into a .zip package.
 2. Install the required CDK packages and modules
-3. Boostrap both CDK stacks
-4. Launch the primary region CDK stack
-5. Retrieve the ARN of the Global Table stream
-6. Launch the secondary region CDK stack
+3. Boostrap the CDK
+4. Launch the CDK stacks in the primary and secondary regions
 
 Whilst this script is running, it will require your confirmation before infrastructure is launched in your account. On two occasions you will be prompted to type `y` and press the return key.
 
@@ -107,4 +105,3 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
-

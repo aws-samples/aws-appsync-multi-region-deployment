@@ -22,22 +22,26 @@ from aws_cdk import (
     aws_appsync as appsync,
     core
 )
+import boto3
 
-class GlobalserverlesssecondregionStack(core.Stack):
+class SecondaryRegionStack(core.Stack):
 
-    def __init__(self, scope: core.Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, construct_id: str, primary: bool, primary_region: str, secondary_region: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # =============================================================================================
-        #           USER INPUTS
+        #           INPUTS
         # =============================================================================================
-        # The user must manually insert the ARN of the stream of the global table in the second region
-        # The user can achieve this with the following CLI commands:
-        # STREAMARN=$(aws dynamodbstreams list-streams --region ap-southeast-2 --table-name GlobalDDBTableForAppSync | grep -oP '(?<="StreamArn": ")[^"]*')
-        # cdk deploy --parameters globalStreamARN=$STREAMARN
+        # The stack depends on the ARN of the Stream for the Global Table created in the Primary Region
+        # We retrieve this using the AWS SDK
+        
+        client = boto3.client('dynamodbstreams', region_name=secondary_region)
 
-        global_table_stream_arn =core.CfnParameter(self, "globalStreamARN", type="String",
-            description="The ARN of the stream in the secondary region")
+        response = client.list_streams(
+            TableName='GlobalDDBTableForAppSync',
+            Limit=1
+            )
+        global_table_stream_arn = response['Streams'][0]['StreamArn']
 
         # =============================================================================================
         #           DYNAMO DB GLOBAL TABLE
@@ -47,7 +51,7 @@ class GlobalserverlesssecondregionStack(core.Stack):
             self,
             'GlobalTable',
             table_name="GlobalDDBTableForAppSync",
-            table_stream_arn = global_table_stream_arn.value_as_string
+            table_stream_arn = global_table_stream_arn
         )
 
          # =============================================================================================

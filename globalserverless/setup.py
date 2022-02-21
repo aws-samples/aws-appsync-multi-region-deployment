@@ -26,6 +26,7 @@ setuptools.setup(
         "aws-cdk.aws_dynamodb==1.118.0",
         "aws-cdk.aws_lambda_event_sources==1.118.0",
         "aws-cdk.aws_appsync==1.118.0",
+        "boto3==1.21.3",
     ],
 
     python_requires=">=3.6",
