@@ -25,7 +25,5 @@ secondary_stack = SecondaryRegionStack(
     primary_region='eu-west-1',
     secondary_region='ap-southeast-2'
 )
-    
-secondary_stack.add_dependency(primary_stack)
 
 app.synth()
