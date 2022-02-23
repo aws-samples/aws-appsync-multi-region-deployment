@@ -33,7 +33,6 @@ const publishItem = gql`
 
 const executeMutation = async(id, name) => {
   console.info("Executing Mutation")
-  console.info("DEBUG1901: EXPORTS.JS executeMutation")
   const mutation = {
     query: print(publishItem),
     variables: {
@@ -41,8 +40,7 @@ const executeMutation = async(id, name) => {
       id: id,
     },
   };
-  console.info("Mutation generated. Mutation: "+util.inspect(mutation))
-  console.info("Mutation json stringify: "+JSON.stringify(mutation))
+
   try {
     console.info("Attempting Axios")
     let response = await axios({
@@ -53,8 +51,6 @@ const executeMutation = async(id, name) => {
       },
       data: JSON.stringify(mutation)
     });
-    console.info("Axios Completed. Data: "+util.inspect(response.data))
-    console.log("Response: " + response.data);
   } catch (error) {
     console.info("Error caught")
     console.error(`[ERROR] ${error.response.status} - ${JSON.stringify(error.response.data)}`);
@@ -63,17 +59,12 @@ const executeMutation = async(id, name) => {
 };
 
 exports.handler = async(event) => {
-  console.info("DEBUG1901: EXPORTS.JS exports.handler")
-  console.log("API Key: "+process.env.AppSyncAPIKey)
   for (let record of event.Records) {
     switch (record.eventName) {
       case 'INSERT':
-        console.info("Item Inserted");
         // Grab the data we need from stream...
         let id = record.dynamodb.Keys.id.S;
         let name = record.dynamodb.NewImage.item.S;
-        console.info("id: "+id)
-        console.info("name: "+name)
         // ... and then execute the publish mutation
         await executeMutation(id, name);
         break;
@@ -82,14 +73,12 @@ exports.handler = async(event) => {
          * we only notify about new data being inserted.
          * However we have left the case here as a placeholder.
         */
-        console.info("Item Updated");
         break;
       case 'DELETE':
         /* To keep this example simple, we do not notify about DELETES made to the data,
          * we only notify about new data being inserted.
          * however we have left the case here as a placeholder.
         */
-        console.info("Item Deleted");
         break;
       default:
         break;
