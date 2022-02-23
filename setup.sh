@@ -22,7 +22,9 @@ virtualenv venv
 source venv/bin/activate
 pip install -e .
 cdk bootstrap
-cdk deploy --all
+cdk deploy GlobalServerlessPrimaryStack
+STREAMARN=$(aws dynamodbstreams list-streams --region ap-southeast-2 --table-name GlobalDDBTableForAppSync --limit 1 | grep -oP '(?<="StreamArn": ")[^"]*')
+cdk deploy GlobalServerlessSecondaryStack --parameters globalStreamARN=$STREAMARN
 deactivate
 
 # Finish

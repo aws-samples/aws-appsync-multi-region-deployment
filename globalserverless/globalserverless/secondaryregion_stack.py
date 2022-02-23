@@ -35,13 +35,17 @@ class SecondaryRegionStack(core.Stack):
         # The stack depends on the ARN of the Stream for the Global Table created in the Primary Region
         # We retrieve this using the AWS SDK
         
-        client = boto3.client('dynamodbstreams', region_name=secondary_region)
+        # client = boto3.client('dynamodbstreams', region_name=secondary_region)
 
-        response = client.list_streams(
-            TableName='GlobalDDBTableForAppSync',
-            Limit=1
-            )
-        global_table_stream_arn = response['Streams'][0]['StreamArn']
+        # response = client.list_streams(
+        #     TableName='GlobalDDBTableForAppSync',
+        #     Limit=1
+        #     )
+        # global_table_stream_arn = response['Streams'][0]['StreamArn']
+        
+        
+        global_table_stream_arn =core.CfnParameter(self, "globalStreamARN", type="String",
+            description="The ARN of the stream in the secondary region")
 
         # =============================================================================================
         #           DYNAMO DB GLOBAL TABLE
@@ -51,7 +55,7 @@ class SecondaryRegionStack(core.Stack):
             self,
             'GlobalTable',
             table_name="GlobalDDBTableForAppSync",
-            table_stream_arn = global_table_stream_arn
+            table_stream_arn = global_table_stream_arn.value_as_string
         )
 
          # =============================================================================================
