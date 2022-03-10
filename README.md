@@ -93,9 +93,7 @@ mutation MyMutation {
 To clean up the infrastructure launched, execute the following commands from your cloud9 environment:
 ```bash
 cd globalserverless
-cdk destroy
-cd ../globalserverlesssecondregion
-cdk destroy
+cdk destroy --all
 ```
 
 ## Security
